@@ -1,32 +1,32 @@
 package com.chronoshatter;
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.ScreenUtils;
+import com.chronoshatter.states.GameStateManager;
+import com.chronoshatter.states.MenuState;
 
-/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class ChronoShatterGame extends ApplicationAdapter {
+
     private SpriteBatch batch;
-    private Texture image;
+    private GameStateManager gsm;
 
     @Override
     public void create() {
         batch = new SpriteBatch();
-        image = new Texture("libgdx.png");
+        gsm   = GameStateManager.getInstance();
+        gsm.pushState(new MenuState(gsm));
     }
 
     @Override
     public void render() {
-        ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
-        batch.begin();
-        batch.draw(image, 140, 210);
-        batch.end();
+        float delta = com.badlogic.gdx.Gdx.graphics.getDeltaTime();
+        gsm.update(delta);
+        gsm.render(batch);
     }
 
     @Override
     public void dispose() {
         batch.dispose();
-        image.dispose();
+        gsm.dispose();
     }
 }
